@@ -10,8 +10,8 @@ Standart [Raygun4Net library](https://github.com/MindscapeHQ/raygun4net) does no
 
 Package               | Description                               | NuGet
 ----------------------|-------------------------------------------|-------
-RaygunCore            | Raygun client and logger                  | ![NuGet](https://img.shields.io/nuget/v/RaygunCore.svg)
-RaygunCore.AspNetCore | Handler for ASP.NET Core request pipeline | ![NuGet](https://img.shields.io/nuget/v/RaygunCore.AspNetCore.svg)
+RaygunCore            | Raygun client and logger                  | [![NuGet](https://img.shields.io/nuget/v/RaygunCore.svg)](https://www.nuget.org/packages/RaygunCore)
+RaygunCore.AspNetCore | Handler for ASP.NET Core request pipeline | [![NuGet](https://img.shields.io/nuget/v/RaygunCore.AspNetCore.svg)](https://www.nuget.org/packages/RaygunCore.AspNetCore)
 
 ## How to use with ASP.NET Core
 

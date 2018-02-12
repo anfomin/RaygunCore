@@ -1,0 +1,18 @@
+# Build
+artifacts
+bin
+obj
+
+# User-specific files
+*.suo
+*.user
+*.docstates
+*.ide
+*.publishsettings
+
+# OS X temporary files
+.DS_Store
+._*
+
+# IDE
+.vs

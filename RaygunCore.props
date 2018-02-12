@@ -1,0 +1,13 @@
+﻿<Project>
+	<PropertyGroup>
+		<Product>RaygunCore</Product>
+		<Authors>AFomin</Authors>
+		<RepositoryUrl>https://github.com/anfomin/rayguncore</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
+		<NoWarn>$(NoWarn);1573;1591</NoWarn>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+</Project>

@@ -23,9 +23,9 @@ namespace RaygunCore.Services
 		{
 			var asm = GetType().Assembly;
 			details.MachineName = System.Environment.MachineName;
-			details.Version = _options.AppVersion;
+			details.Version = _options.AppVersion ?? Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 			details.Client.Name = asm.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-			details.Client.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+			details.Client.Version = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 			details.Client.ClientUrl = "https://github.com/anfomin/raygun";
 		}
 	}

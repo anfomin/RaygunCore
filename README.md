@@ -45,7 +45,7 @@ public async Task<string> ActionInController([FromServices]IRaygunClient raygun)
     }
     catch (Exception ex)
     {
-        await raygun.SentAsync(ex);
+        await raygun.SendAsync(ex);
     }
     return "OK";
 }

@@ -48,6 +48,12 @@ namespace RaygunCore
 		public bool IgnoreLocalErrors { get; set; }
 
 		/// <summary>
+		/// Gets or sets if <see cref="OperationCanceledException"/> is ignored in HTTP middleware.
+		/// Default <c>true</c>.
+		/// </summary>
+		public bool IgnoreCanceledErrors { get; set; } = true;
+
+		/// <summary>
 		/// Gets or sets if request headers are not logged.
 		/// Works only when Raygun HTTP services registered.
 		/// Default <c>false</c>.

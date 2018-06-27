@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
 		/// </summary>
 		public static IRaygunBuilder AddRaygun(this IServiceCollection services)
 		{
+			services.AddOptions();
 			services.TryAddSingleton<IRaygunClient, DefaultRaygunClient>();
 			services.TryAddSingleton<IRaygunMessageBuilder, DefaultRaygunMessageBuilder>();
 			services.TryAddEnumerable(ServiceDescriptor.Singleton<IRaygunMessageProvider, MainMessageProvider>());

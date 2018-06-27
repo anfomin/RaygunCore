@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace RaygunCore.Services
 {
@@ -26,7 +27,9 @@ namespace RaygunCore.Services
 			catch (Exception ex)
 			{
 				var client = httpContext.RequestServices.GetRequiredService<IRaygunClient>();
-				await client.SendAsync(ex, RaygunSeverity.Critical);
+				var opt = httpContext.RequestServices.GetRequiredService<IOptions<RaygunOptions>>().Value;
+				if (!opt.IgnoreCanceledErrors || !(ex is OperationCanceledException))
+					await client.SendAsync(ex, RaygunSeverity.Critical);
 				throw;
 			}
 		}

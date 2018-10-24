@@ -13,7 +13,7 @@ namespace RaygunCore.Services
 	/// </summary>
 	public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 	{
-		const string DiagnosticsMessage = "An unhandled exception has occurred while executing the request";
+		const string DiagnosticsMessage = "An unhandled exception has occurred while executing the request.";
 		readonly IEnumerable<IRaygunMessageProvider> _providers;
 
 		public DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers)

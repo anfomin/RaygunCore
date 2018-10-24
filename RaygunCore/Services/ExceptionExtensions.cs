@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace RaygunCore.Services
 {
@@ -40,6 +42,35 @@ namespace RaygunCore.Services
 			if (exception == null)
 				throw new ArgumentNullException(nameof(exception));
 			return exception?.Data != null && exception.Data.Contains(SentKey) && exception.Data[SentKey] is bool b && b;
+		}
+
+		/// <summary>
+		/// Returns inner exceptions if <paramref name="exception"/> is any of <paramref name="wrapperExceptionTypes"/>.
+		/// </summary>
+		/// <param name="wrapperExceptionTypes">Exception types to strip.</param>
+		public static IEnumerable<Exception> StripWrapperExceptions(this Exception exception, IEnumerable<Type> wrapperExceptionTypes)
+		{
+			if (wrapperExceptionTypes == null)
+				throw new ArgumentNullException(nameof(wrapperExceptionTypes));
+
+			if (exception != null && wrapperExceptionTypes.Any(type => exception.GetType() == type && exception.InnerException != null))
+			{
+				if (exception is AggregateException ae)
+				{
+					foreach (var inner in ae.InnerExceptions)
+					foreach (var ex in StripWrapperExceptions(inner, wrapperExceptionTypes))
+						yield return ex;
+				}
+				else
+				{
+					foreach (var ex in StripWrapperExceptions(exception.InnerException, wrapperExceptionTypes))
+						yield return ex;
+				}
+			}
+			else
+			{
+				yield return exception;
+			}
 		}
 	}
 }

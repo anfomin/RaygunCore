@@ -17,10 +17,11 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IRaygunBuilder AddRaygun(this IServiceCollection services)
 		{
 			services.AddOptions();
-			services.TryAddSingleton<IRaygunClient, DefaultRaygunClient>();
-			services.TryAddSingleton<IRaygunMessageBuilder, DefaultRaygunMessageBuilder>();
-			services.TryAddEnumerable(ServiceDescriptor.Singleton<IRaygunMessageProvider, MainMessageProvider>());
-			services.TryAddEnumerable(ServiceDescriptor.Singleton<IRaygunMessageProvider, EnvironmentMessageProvider>());
+			services.AddHttpClient();
+			services.TryAddTransient<IRaygunClient, DefaultRaygunClient>();
+			services.TryAddTransient<IRaygunMessageBuilder, DefaultRaygunMessageBuilder>();
+			services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, MainMessageProvider>());
+			services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, EnvironmentMessageProvider>());
 			return new RaygunBuilder(services);
 		}
 

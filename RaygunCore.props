@@ -6,7 +6,7 @@
 		<RepositoryUrl>https://github.com/anfomin/rayguncore</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/anfomin/rayguncore</PackageProjectUrl>
 		<PackageLicenseUrl>https://github.com/anfomin/rayguncore/blob/master/LICENSE</PackageLicenseUrl>
-		<VersionPrefix>1.1.0</VersionPrefix>
+		<VersionPrefix>1.2.0</VersionPrefix>
 		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
 		<NoWarn>$(NoWarn);1573;1591</NoWarn>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>

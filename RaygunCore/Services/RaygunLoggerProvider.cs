@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace RaygunCore.Services
@@ -8,17 +9,18 @@ namespace RaygunCore.Services
 	/// </summary>
 	public class RaygunLoggerProvider : ILoggerProvider
 	{
-		readonly IRaygunClient _client;
+		readonly IServiceProvider _services;
 
-		public RaygunLoggerProvider(IRaygunClient client)
+		public RaygunLoggerProvider(IServiceProvider services)
 		{
-			_client = client ?? throw new ArgumentNullException(nameof(client));
+			_services = services ?? throw new ArgumentNullException(nameof(services));
 		}
 
 		/// <inheritdoc/>
 		public ILogger CreateLogger(string categoryName)
 		{
-			return new RaygunLogger(_client);
+			// using Lazy because IHttpClientFactory requires logger and DI fails with dependency recursion
+			return new RaygunLogger(new Lazy<IRaygunClient>(() => _services.GetRequiredService<IRaygunClient>()));
 		}
 
 		/// <inheritdoc/>

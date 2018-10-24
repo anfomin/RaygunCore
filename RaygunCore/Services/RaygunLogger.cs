@@ -9,9 +9,9 @@ namespace RaygunCore.Services
 	/// </summary>
 	public class RaygunLogger : ILogger
 	{
-		readonly IRaygunClient _client;
+		readonly Lazy<IRaygunClient> _client;
 
-		public RaygunLogger(IRaygunClient client)
+		public RaygunLogger(Lazy<IRaygunClient> client)
 		{
 			_client = client ?? throw new ArgumentNullException(nameof(client));
 		}
@@ -34,7 +34,7 @@ namespace RaygunCore.Services
 
 			var message = formatter(state, exception);
 			if (!string.IsNullOrEmpty(message) || exception != null)
-				_client.SendAsync(message, exception, GetSeverity(logLevel));
+				_client.Value.SendAsync(message, exception, GetSeverity(logLevel));
 		}
 
 		RaygunSeverity GetSeverity(LogLevel logLevel)

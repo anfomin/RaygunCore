@@ -17,11 +17,12 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IRaygunBuilder WithHttp(this IRaygunBuilder builder)
 		{
 			builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-			builder.Services.AddSingleton<IStartupFilter, RaygunStartupFilter>();
 			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, RequestMessageProvider>());
 			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, ResponseMessageProvider>());
 			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, UserMessageProvider>());
 			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunValidator, LocalValidator>());
+			if (!builder.IsLogging)
+				builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStartupFilter, RaygunStartupFilter>());
 			return builder;
 		}
 	}

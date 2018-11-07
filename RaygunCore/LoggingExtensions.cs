@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.Logging
 		public static ILoggingBuilder AddRaygun(this ILoggingBuilder logging, Action<IRaygunBuilder> builder)
 		{
 			var b = logging.Services.AddRaygun();
+			((RaygunBuilder)b).IsLogging = true;
 			logging.Services.AddSingleton<ILoggerProvider, RaygunLoggerProvider>();
 			builder(b);
 			return logging;

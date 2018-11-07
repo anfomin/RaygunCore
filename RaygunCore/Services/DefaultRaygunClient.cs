@@ -82,14 +82,11 @@ namespace RaygunCore.Services
 		{
 			try
 			{
-				Console.WriteLine("Sending to raygun: " + _options.ApiKey);
 				var result = await CreateClient().PostAsync(_options.ApiEndpoint, new JsonContent(message));
 				result.EnsureSuccessStatusCode();
-				Console.WriteLine("Sent to raygun");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error sending exception to Raygun {ex.Message}");
 				if (_options.ThrowOnError)
 					throw new RaygunException(ex);
 			}

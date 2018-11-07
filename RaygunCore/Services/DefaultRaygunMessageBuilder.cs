@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using RaygunCore.Messages;
 
 namespace RaygunCore.Services
@@ -13,7 +14,11 @@ namespace RaygunCore.Services
 	/// </summary>
 	public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 	{
-		const string DiagnosticsMessage = "An unhandled exception has occurred while executing the request.";
+		static Regex[] DiagnosticsMessages =
+		{
+			new Regex("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase),
+			new Regex(@"^Connection id ""\w+"", Request id ""\w+:\d+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)
+		};
 		readonly IEnumerable<IRaygunMessageProvider> _providers;
 
 		public DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers)
@@ -42,8 +47,8 @@ namespace RaygunCore.Services
 					msg.Details.UserCustomData[kv.Key] = kv.Value;
 			}
 
-			// apply message text or exception
-			if (message != null && (exception == null || message != exception.Message && message != DiagnosticsMessage))
+			// apply message or exception
+			if (message != null && (exception == null || ShouldApplyCustomErrorMessage(message, exception)))
 			{
 				msg.Details.Error = new RaygunErrorMessage
 				{
@@ -120,6 +125,11 @@ namespace RaygunCore.Services
 			}
 
 			return lines.ToArray();
+		}
+
+		bool ShouldApplyCustomErrorMessage(string message, Exception exception)
+		{
+			return message != exception.Message && DiagnosticsMessages.All(regex => !regex.IsMatch(message));
 		}
 
 		string GenerateMethodName(MethodBase method)

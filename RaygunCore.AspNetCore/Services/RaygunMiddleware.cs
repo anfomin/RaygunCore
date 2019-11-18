@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace RaygunCore.Services
@@ -12,10 +11,14 @@ namespace RaygunCore.Services
 	public class RaygunMiddleware
 	{
 		readonly RequestDelegate _next;
+		readonly IRaygunClient _client;
+		readonly bool _ignoreCanceledErros;
 
-		public RaygunMiddleware(RequestDelegate next)
+		public RaygunMiddleware(RequestDelegate next, IRaygunClient client, IOptions<RaygunOptions> options)
 		{
 			_next = next ?? throw new ArgumentNullException(nameof(next));
+			_client = client ?? throw new ArgumentNullException(nameof(client));
+			_ignoreCanceledErros = options.Value.IgnoreCanceledErrors;
 		}
 
 		public async Task Invoke(HttpContext httpContext)
@@ -26,10 +29,8 @@ namespace RaygunCore.Services
 			}
 			catch (Exception ex)
 			{
-				var client = httpContext.RequestServices.GetRequiredService<IRaygunClient>();
-				var opt = httpContext.RequestServices.GetRequiredService<IOptions<RaygunOptions>>().Value;
-				if (!opt.IgnoreCanceledErrors || !(ex is OperationCanceledException))
-					await client.SendAsync(ex, RaygunSeverity.Critical);
+				if (!_ignoreCanceledErros || !(ex is OperationCanceledException))
+					await _client.SendAsync(ex, RaygunSeverity.Critical);
 				throw;
 			}
 		}

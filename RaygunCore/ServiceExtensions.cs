@@ -3,6 +3,7 @@ using RaygunCore;
 using RaygunCore.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,6 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			services.TryAddTransient<IRaygunMessageBuilder, DefaultRaygunMessageBuilder>();
 			services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, MainMessageProvider>());
 			services.TryAddEnumerable(ServiceDescriptor.Transient<IRaygunMessageProvider, EnvironmentMessageProvider>());
+			services.AddSingleton<IHostedService, RaygunLoggerWaiter>();
 			return new RaygunBuilder(services);
 		}
 

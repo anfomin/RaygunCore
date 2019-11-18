@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace RaygunCore.Services
@@ -9,6 +11,9 @@ namespace RaygunCore.Services
 	/// </summary>
 	public class RaygunLogger : ILogger
 	{
+		static HashSet<Task> _runningTasks = new HashSet<Task>();
+		public static IEnumerable<Task> RunningTasks => _runningTasks;
+
 		readonly Lazy<IRaygunClient> _client;
 
 		public RaygunLogger(Lazy<IRaygunClient> client)
@@ -34,7 +39,12 @@ namespace RaygunCore.Services
 
 			var message = formatter(state, exception);
 			if (!string.IsNullOrEmpty(message) || exception != null)
-				_client.Value.SendAsync(message, exception, GetSeverity(logLevel));
+			{
+				var task = _client.Value.SendAsync(message, exception, GetSeverity(logLevel));
+				if (!task.IsCompleted)
+					_runningTasks.Add(task);
+				task.ContinueWith(task => _runningTasks.Remove(task));
+			}
 		}
 
 		RaygunSeverity GetSeverity(LogLevel logLevel)

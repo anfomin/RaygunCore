@@ -43,7 +43,7 @@ namespace RaygunCore.Services
 			};
 		}
 
-		string GetIpAddress(ConnectionInfo connection)
+		string? GetIpAddress(ConnectionInfo connection)
 		{
 			var ip = connection.RemoteIpAddress ?? connection.LocalIpAddress;
 			if (ip == null)
@@ -60,7 +60,7 @@ namespace RaygunCore.Services
 			return request.Query.ToDictionary(q => q.Key, q => (object)q.Value.ToString());
 		}
 
-		Dictionary<string, object> GetHeaders(HttpRequest request)
+		Dictionary<string, object>? GetHeaders(HttpRequest request)
 		{
 			if (_options.IgnoreHeaders)
 				return null;
@@ -69,7 +69,7 @@ namespace RaygunCore.Services
 				.ToDictionary(h => h.Key, h => (object)h.Value.ToString());
 		}
 
-		Dictionary<string, object> GetCookies(HttpRequest request)
+		Dictionary<string, object>? GetCookies(HttpRequest request)
 		{
 			if (_options.IgnoreCookies)
 				return null;
@@ -78,7 +78,7 @@ namespace RaygunCore.Services
 				.ToDictionary(c => c.Key, c => (object)c.Value);
 		}
 
-		Dictionary<string, object> GetForm(HttpRequest request)
+		Dictionary<string, object>? GetForm(HttpRequest request)
 		{
 			if (_options.IgnoreForm || !request.HasFormContentType)
 				return null;

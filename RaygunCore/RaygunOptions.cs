@@ -12,7 +12,7 @@ namespace RaygunCore
 		/// <summary>
 		/// Gets or sets API key.
 		/// </summary>
-		public string ApiKey { get; set; }
+		public string ApiKey { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets API endpoint.
@@ -22,7 +22,7 @@ namespace RaygunCore
 		/// <summary>
 		/// Gets or sets a application version identifier for all error messages sent to the Raygun endpoint.
 		/// </summary>
-		public string AppVersion { get; set; }
+		public string? AppVersion { get; set; }
 
 		/// <summary>
 		/// Gets or sets if Raygun client should throw error if transmit failed.

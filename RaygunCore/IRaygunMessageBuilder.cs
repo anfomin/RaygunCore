@@ -17,6 +17,6 @@ namespace RaygunCore
 		/// <param name="severity">Message severity.</param>
 		/// <param name="tags">A list of strings associated with the message.</param>
 		/// <param name="customData">A key-value collection of custom data that will be added to the payload.</param>
-		RaygunMessage Build(string message, Exception exception, RaygunSeverity? severity, IList<string> tags, IDictionary<string, object> customData);
+		RaygunMessage Build(string message, Exception? exception, RaygunSeverity? severity, IList<string>? tags, IDictionary<string, object>? customData);
 	}
 }

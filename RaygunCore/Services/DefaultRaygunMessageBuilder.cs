@@ -27,10 +27,10 @@ namespace RaygunCore.Services
 		}
 
 		/// <inheritdoc/>
-		public virtual RaygunMessage Build(string message, Exception exception, RaygunSeverity? severity, IList<string> tags, IDictionary<string, object> customData)
+		public virtual RaygunMessage Build(string message, Exception? exception, RaygunSeverity? severity, IList<string>? tags, IDictionary<string, object>? customData)
 		{
-			if (message == null && exception == null)
-				throw new ArgumentNullException(nameof(message), "Message or exception is required");
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
 
 			// create message
 			var msg = new RaygunMessage();
@@ -48,7 +48,7 @@ namespace RaygunCore.Services
 			}
 
 			// apply message or exception
-			if (message != null && (exception == null || ShouldApplyCustomErrorMessage(message, exception)))
+			if (exception == null || ShouldApplyCustomErrorMessage(message, exception))
 			{
 				msg.Details.Error = new RaygunErrorMessage
 				{

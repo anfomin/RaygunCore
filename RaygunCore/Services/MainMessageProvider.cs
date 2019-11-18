@@ -1,5 +1,3 @@
-using System;
-using System.Globalization;
 using System.Reflection;
 using RaygunCore.Messages;
 using Microsoft.Extensions.Options;

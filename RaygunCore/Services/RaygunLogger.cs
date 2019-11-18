@@ -19,7 +19,7 @@ namespace RaygunCore.Services
 		/// <summary>
 		/// Not implemeted.
 		/// </summary>
-		public IDisposable BeginScope<TState>(TState state) => null;
+		public IDisposable? BeginScope<TState>(TState state) => null;
 
 		/// <inheritdoc/>
 		public bool IsEnabled(LogLevel logLevel) => logLevel >= LogLevel.Warning;
@@ -38,18 +38,12 @@ namespace RaygunCore.Services
 		}
 
 		RaygunSeverity GetSeverity(LogLevel logLevel)
-		{
-			switch (logLevel)
+			=> logLevel switch
 			{
-				case LogLevel.Warning:
-					return RaygunSeverity.Warning;
-				case LogLevel.Error:
-					return RaygunSeverity.Error;
-				case LogLevel.Critical:
-					return RaygunSeverity.Critical;
-				default:
-					throw new NotSupportedException($"LogLevel {logLevel} is not supported");
-			}
-		}
+				LogLevel.Warning => RaygunSeverity.Warning,
+				LogLevel.Error => RaygunSeverity.Error,
+				LogLevel.Critical => RaygunSeverity.Critical,
+				_ => throw new NotSupportedException($"LogLevel {logLevel} is not supported")
+			};
 	}
 }

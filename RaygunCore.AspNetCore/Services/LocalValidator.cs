@@ -20,7 +20,7 @@ namespace RaygunCore.Services
 		}
 
 		/// <inheritdoc/>
-		public bool ShouldSend(string message, Exception ex)
+		public bool ShouldSend(string message, Exception? ex)
 		{
 			var context = _httpContextAccessor.HttpContext;
 			return context == null || !_options.IgnoreLocalErrors || !context.Request.IsLocal();

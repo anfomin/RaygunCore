@@ -4,11 +4,11 @@ namespace RaygunCore.Messages
 {
 	public class RaygunMessageDetails
 	{
-		public string MachineName { get; set; }
+		public string? MachineName { get; set; }
 
-		public string GroupingKey { get; set; }
+		public string? GroupingKey { get; set; }
 
-		public string Version { get; set; }
+		public string? Version { get; set; }
 
 		public RaygunClientMessage Client { get; } = new RaygunClientMessage();
 
@@ -18,12 +18,12 @@ namespace RaygunCore.Messages
 
 		public Dictionary<string, object> UserCustomData { get; } = new Dictionary<string, object>();
 
-		public RaygunErrorMessage Error { get; set; }
+		public RaygunErrorMessage Error { get; set; } = null!;
 
-		public RaygunUserMessage User { get; set; }
+		public RaygunUserMessage? User { get; set; }
 
-		public RaygunRequestMessage Request { get; set; }
+		public RaygunRequestMessage? Request { get; set; }
 
-		public RaygunResponseMessage Response { get; set; }
+		public RaygunResponseMessage? Response { get; set; }
 	}
 }

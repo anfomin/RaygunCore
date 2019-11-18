@@ -17,7 +17,7 @@ namespace RaygunCore
 		/// <param name="severity">Message severity.</param>
 		/// <param name="tags">A list of strings associated with the message.</param>
 		/// <param name="customData">A key-value collection of custom data that will be added to the payload.</param>
-		Task SendAsync(string message, Exception exception, RaygunSeverity? severity = null, IList<string> tags = null, IDictionary<string, object> customData = null);
+		Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null);
 	}
 
 	/// <summary>
@@ -32,7 +32,7 @@ namespace RaygunCore
 		/// <param name="severity">Message severity.</param>
 		/// <param name="tags">A list of strings associated with the message.</param>
 		/// <param name="customData">A key-value collection of custom data that will be added to the payload.</param>
-		public static Task SendAsync(this IRaygunClient client, string message, RaygunSeverity? severity = null, IList<string> tags = null, IDictionary<string, object> customData = null)
+		public static Task SendAsync(this IRaygunClient client, string message, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null)
 		{
 			return client.SendAsync(message, null, severity, tags, customData);
 		}
@@ -44,9 +44,9 @@ namespace RaygunCore
 		/// <param name="severity">Exception severity.</param>
 		/// <param name="tags">A list of strings associated with the message.</param>
 		/// <param name="customData">A key-value collection of custom data that will be added to the payload.</param>
-		public static Task SendAsync(this IRaygunClient client, Exception exception, RaygunSeverity? severity = null, IList<string> tags = null, IDictionary<string, object> customData = null)
+		public static Task SendAsync(this IRaygunClient client, Exception exception, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null)
 		{
-			return client.SendAsync(null, exception, severity, tags, customData);
+			return client.SendAsync(exception.Message, exception, severity, tags, customData);
 		}
 	}
 }

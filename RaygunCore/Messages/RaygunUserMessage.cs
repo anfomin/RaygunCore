@@ -18,22 +18,22 @@
 		/// <summary>
 		/// User's email address
 		/// </summary>
-		public string Email { get; set; }
+		public string? Email { get; set; }
 
 		/// <summary>
 		/// User's full name. If you are going to set any names, you should probably set this one too.
 		/// </summary>
-		public string FullName { get; set; }
+		public string? FullName { get; set; }
 
 		/// <summary>
 		/// User's first name.
 		/// </summary>
-		public string FirstName { get; set; }
+		public string? FirstName { get; set; }
 
 		/// <summary>
 		/// Device Identifier. Could be used to identify users across apps.
 		/// </summary>
-		public string UUID { get; set; }
+		public string? UUID { get; set; }
 
 		public RaygunUserMessage(string identifier)
 		{

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace RaygunCore.Services
@@ -53,7 +52,7 @@ namespace RaygunCore.Services
 			if (wrapperExceptionTypes == null)
 				throw new ArgumentNullException(nameof(wrapperExceptionTypes));
 
-			if (exception != null && wrapperExceptionTypes.Any(type => exception.GetType() == type && exception.InnerException != null))
+			if (exception.InnerException != null && wrapperExceptionTypes.Any(type => exception.GetType() == type))
 			{
 				if (exception is AggregateException ae)
 				{

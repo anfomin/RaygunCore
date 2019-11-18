@@ -6,21 +6,21 @@ namespace RaygunCore.Messages
 	{
 		public int? ProcessorCount { get; set; }
 
-		public string OSVersion { get; set; }
+		public string? OSVersion { get; set; }
 
 		public double? WindowBoundsWidth { get; set; }
 
 		public double? WindowBoundsHeight { get; set; }
 
-		public string Cpu { get; set; }
+		public string? Cpu { get; set; }
 
-		public string Architecture { get; set; }
+		public string? Architecture { get; set; }
 
 		public ulong? TotalVirtualMemory { get; set; }
 
 		public ulong? AvailableVirtualMemory { get; set; }
 
-		public IList<double> DiskSpaceFree { get; set; }
+		public IList<double>? DiskSpaceFree { get; set; }
 
 		public ulong? TotalPhysicalMemory { get; set; }
 
@@ -28,6 +28,6 @@ namespace RaygunCore.Messages
 
 		public double? UtcOffset { get; set; }
 
-		public string Locale { get; set; }
+		public string? Locale { get; set; }
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -29,14 +28,15 @@ namespace RaygunCore.Services
 		{
 			_clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
 			_messageBuilder = messageBuilder ?? throw new ArgumentNullException(nameof(messageBuilder));
-			_validators = validators;
+			_validators = validators ?? throw new ArgumentNullException(nameof(validators));;
 			_options = options.Value;
 		}
 
 		/// <inheritdoc/>
-		public async Task SendAsync(string message, Exception exception, RaygunSeverity? severity = null, IList<string> tags = null, IDictionary<string, object> customData = null)
+		public async Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null)
 		{
-			foreach (var ex in exception.StripWrapperExceptions(_options.WrapperExceptions))
+			IEnumerable<Exception?> exceptions = exception?.StripWrapperExceptions(_options.WrapperExceptions) ?? Enumerable.Repeat<Exception?>(null, 1);
+			foreach (var ex in exceptions)
 			{
 				if (ShouldSend(message, ex))
 				{
@@ -66,11 +66,11 @@ namespace RaygunCore.Services
 		/// </summary>
 		/// <param name="message">Custom text.</param>
 		/// <param name="exception">The exception to deliver.</param>
-		protected virtual bool ShouldSend(string message, Exception exception)
+		protected virtual bool ShouldSend(string message, Exception? exception)
 		{
 			return (exception == null || !exception.IsSent())
 				&& !(exception is RaygunException)
-				&& (_validators == null || _validators.All(v => v.ShouldSend(message, exception)));
+				&& _validators.All(v => v.ShouldSend(message, exception));
 		}
 
 		/// <summary>

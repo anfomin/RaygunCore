@@ -10,8 +10,8 @@ namespace RaygunCore
 		/// <summary>
 		/// Determines if message and exception should be sent to Raygun.
 		/// </summary>
-		/// <param name="message">Custom text.</param>
+		/// <param name="message">Message text.</param>
 		/// <param name="exception">The exception to deliver.</param>
-		bool ShouldSend(string message, Exception exception);
+		bool ShouldSend(string message, Exception? exception);
 	}
 }

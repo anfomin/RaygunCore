@@ -41,6 +41,11 @@ namespace RaygunCore
 		};
 
 		/// <summary>
+		/// Gets or sets tags for all error messages sent to the Raygun endpoint.
+		/// </summary>
+		public IList<string>? Tags { get; set; }
+
+		/// <summary>
 		/// Gets or sets if errors for local requests are skipped.
 		/// Works only when Raygun HTTP services registered.
 		/// Default <c>false</c>.

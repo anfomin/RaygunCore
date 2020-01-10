@@ -17,7 +17,7 @@ namespace RaygunCore.Services
 		static Regex[] DiagnosticsMessages =
 		{
 			new Regex("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase),
-			new Regex(@"^Connection id ""\w+"", Request id ""\w+:\w+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)
+			new Regex(@"^Connection ID ""[\w:-]+"", Request ID ""[\w:-]+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)
 		};
 		readonly IEnumerable<IRaygunMessageProvider> _providers;
 

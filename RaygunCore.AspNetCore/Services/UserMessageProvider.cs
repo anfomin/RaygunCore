@@ -24,7 +24,7 @@ namespace RaygunCore.Services
 				return;
 
 			if (context.User.Identity.IsAuthenticated)
-				details.User = new RaygunUserMessage(context.User.Identity.Name);
+				details.User = new RaygunUserMessage(context.User.Identity.Name!);
 		}
 	}
 }

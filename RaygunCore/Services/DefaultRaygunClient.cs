@@ -36,6 +36,11 @@ namespace RaygunCore.Services
 		public async Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null)
 		{
 			IEnumerable<Exception?> exceptions = exception?.StripWrapperExceptions(_options.WrapperExceptions) ?? Enumerable.Repeat<Exception?>(null, 1);
+            tags = tags == null
+                ? _options.Tags
+                : _options.Tags == null
+                    ? tags
+                    : tags.Concat(_options.Tags).Distinct().ToList();
 			foreach (var ex in exceptions)
 			{
 				if (ShouldSend(message, ex))

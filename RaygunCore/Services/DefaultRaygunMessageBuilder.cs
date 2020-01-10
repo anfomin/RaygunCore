@@ -27,7 +27,7 @@ namespace RaygunCore.Services
 		}
 
 		/// <inheritdoc/>
-		public virtual RaygunMessage Build(string message, Exception? exception, RaygunSeverity? severity, IList<string>? tags, IDictionary<string, object>? customData)
+		public virtual RaygunMessage Build(string message, Exception? exception, RaygunSeverity? severity, IEnumerable<string>? tags, IDictionary<string, object>? customData)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

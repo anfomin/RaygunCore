@@ -35,7 +35,7 @@ namespace RaygunCore
 		/// This can be used when a wrapper exception, e.g. TargetInvocationException, contains the actual
 		/// exception as the InnerException.
 		/// </summary>
-		public ISet<Type> WrapperExceptions { get; } = new HashSet<Type>
+		public ICollection<Type> WrapperExceptions { get; } = new HashSet<Type>
 		{
 			typeof(TargetInvocationException)
 		};
@@ -43,7 +43,7 @@ namespace RaygunCore
 		/// <summary>
 		/// Gets or sets tags for all error messages sent to the Raygun endpoint.
 		/// </summary>
-		public IList<string>? Tags { get; set; }
+		public ICollection<string> Tags { get; set; } = new HashSet<string>();
 
 		/// <summary>
 		/// Gets or sets if errors for local requests are skipped.
@@ -84,20 +84,20 @@ namespace RaygunCore
 		/// This allows you to remove sensitive data from the transmitted copy.
 		/// Works only when Raygun HTTP services registered.
 		/// </summary>
-		public ISet<string> IgnoreHeaderNames { get; } = new HashSet<string>();
+		public ICollection<string> IgnoreHeaderNames { get; } = new HashSet<string>();
 
 		/// <summary>
 		/// Gets or sets a list of request cookies that are not logged.
 		/// This allows you to remove sensitive data from the transmitted copy.
 		/// Works only when Raygun HTTP services registered.
 		/// </summary>
-		public ISet<string> IgnoreCookieNames { get; } = new HashSet<string>();
+		public ICollection<string> IgnoreCookieNames { get; } = new HashSet<string>();
 
 		/// <summary>
 		/// Gets or sets a list of request form fields that are not logged.
 		/// This allows you to remove sensitive data from the transmitted copy.
 		/// Works only when Raygun HTTP services registered.
 		/// </summary>
-		public ISet<string> IgnoreFormFields { get; } = new HashSet<string>();
+		public ICollection<string> IgnoreFormFields { get; } = new HashSet<string>();
 	}
 }

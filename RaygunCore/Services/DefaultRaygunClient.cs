@@ -33,14 +33,12 @@ namespace RaygunCore.Services
 		}
 
 		/// <inheritdoc/>
-		public async Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IList<string>? tags = null, IDictionary<string, object>? customData = null)
+		public async Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IEnumerable<string>? tags = null, IDictionary<string, object>? customData = null)
 		{
+			if (_options.Tags.Count > 0)
+				tags = tags == null ? _options.Tags : tags.Concat(_options.Tags).Distinct();
+
 			IEnumerable<Exception?> exceptions = exception?.StripWrapperExceptions(_options.WrapperExceptions) ?? Enumerable.Repeat<Exception?>(null, 1);
-            tags = tags == null
-                ? _options.Tags
-                : _options.Tags == null
-                    ? tags
-                    : tags.Concat(_options.Tags).Distinct().ToList();
 			foreach (var ex in exceptions)
 			{
 				if (ShouldSend(message, ex))

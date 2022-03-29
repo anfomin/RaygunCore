@@ -1,9 +1,7 @@
-﻿namespace RaygunCore.Messages
-{
-	public class RaygunResponseMessage
-	{
-		public int StatusCode { get; set; }
+﻿namespace RaygunCore.Messages;
 
-		public string? StatusDescription { get; set; }
-	}
+public class RaygunResponseMessage
+{
+	public int StatusCode { get; set; }
+	public string? StatusDescription { get; set; }
 }

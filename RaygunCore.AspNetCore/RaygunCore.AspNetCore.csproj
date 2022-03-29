@@ -5,7 +5,7 @@
 		<AssemblyName>RaygunCore.AspNetCore</AssemblyName>
 		<Description>Raygun provider for ASP.NET Core.</Description>
 		<PackageTags>raygun;core;netcore;aspnetcore;aspnetcoremvc</PackageTags>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

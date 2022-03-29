@@ -1,38 +1,35 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace RaygunCore.Services
+namespace RaygunCore.Services;
+
+/// <summary>
+/// Catches pipeline errors and sends them to Raygun.
+/// </summary>
+public class RaygunMiddleware
 {
-	/// <summary>
-	/// Catches pipeline errors and sends them to Raygun.
-	/// </summary>
-	public class RaygunMiddleware
+	readonly RequestDelegate _next;
+	readonly IRaygunClient _client;
+	readonly bool _ignoreCanceledErros;
+
+	public RaygunMiddleware(RequestDelegate next, IRaygunClient client, IOptions<RaygunOptions> options)
 	{
-		readonly RequestDelegate _next;
-		readonly IRaygunClient _client;
-		readonly bool _ignoreCanceledErros;
+		_next = next ?? throw new ArgumentNullException(nameof(next));
+		_client = client ?? throw new ArgumentNullException(nameof(client));
+		_ignoreCanceledErros = options.Value.IgnoreCanceledErrors;
+	}
 
-		public RaygunMiddleware(RequestDelegate next, IRaygunClient client, IOptions<RaygunOptions> options)
+	public async Task Invoke(HttpContext httpContext)
+	{
+		try
 		{
-			_next = next ?? throw new ArgumentNullException(nameof(next));
-			_client = client ?? throw new ArgumentNullException(nameof(client));
-			_ignoreCanceledErros = options.Value.IgnoreCanceledErrors;
+			await _next.Invoke(httpContext);
 		}
-
-		public async Task Invoke(HttpContext httpContext)
+		catch (Exception ex)
 		{
-			try
-			{
-				await _next.Invoke(httpContext);
-			}
-			catch (Exception ex)
-			{
-				if (!_ignoreCanceledErros || !(ex is OperationCanceledException))
-					await _client.SendAsync(ex, RaygunSeverity.Critical);
-				throw;
-			}
+			if (!_ignoreCanceledErros || ex is not OperationCanceledException)
+				await _client.SendAsync(ex, RaygunSeverity.Critical);
+			throw;
 		}
 	}
 }

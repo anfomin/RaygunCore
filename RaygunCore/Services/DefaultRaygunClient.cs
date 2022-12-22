@@ -1,7 +1,6 @@
-using System.Text;
-using RaygunCore.Messages;
+using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using RaygunCore.Messages;
 
 namespace RaygunCore.Services;
 
@@ -65,11 +64,9 @@ public class DefaultRaygunClient : IRaygunClient
 	/// <param name="message">Custom text.</param>
 	/// <param name="exception">The exception to deliver.</param>
 	protected virtual bool ShouldSend(string message, Exception? exception)
-	{
-		return (exception == null || !exception.IsSent())
+		=> (exception == null || !exception.IsSent())
 			&& exception is not RaygunException
 			&& _validators.All(v => v.ShouldSend(message, exception));
-	}
 
 	/// <summary>
 	/// Transmits a message to Raygun.
@@ -80,7 +77,7 @@ public class DefaultRaygunClient : IRaygunClient
 	{
 		try
 		{
-			var result = await CreateClient().PostAsync(_options.ApiEndpoint, new JsonContent(message));
+			var result = await CreateClient().PostAsync(_options.ApiEndpoint, JsonContent.Create(message));
 			result.EnsureSuccessStatusCode();
 		}
 		catch (Exception ex)
@@ -88,11 +85,5 @@ public class DefaultRaygunClient : IRaygunClient
 			if (_options.ThrowOnError)
 				throw new RaygunException(ex);
 		}
-	}
-
-	class JsonContent : StringContent
-	{
-		public JsonContent(object obj)
-			: base(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json") { }
 	}
 }

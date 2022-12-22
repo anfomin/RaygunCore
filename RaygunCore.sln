@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaygunCore", "RaygunCore\RaygunCore.csproj", "{DA8F7685-6125-4C04-89C3-261684689BFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaygunCore.AspNetCore", "RaygunCore.AspNetCore\RaygunCore.AspNetCore.csproj", "{FFF7285C-4EF8-4EF6-8480-6865CEB61089}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaygunCore.Test", "RaygunCore.Test\RaygunCore.Test.csproj", "{436221A5-06B9-4508-8A2F-BD32B3ADEF48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,5 +46,17 @@ Global
 		{FFF7285C-4EF8-4EF6-8480-6865CEB61089}.Release|x64.Build.0 = Release|x64
 		{FFF7285C-4EF8-4EF6-8480-6865CEB61089}.Release|x86.ActiveCfg = Release|x86
 		{FFF7285C-4EF8-4EF6-8480-6865CEB61089}.Release|x86.Build.0 = Release|x86
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|x64.Build.0 = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Debug|x86.Build.0 = Debug|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|x64.ActiveCfg = Release|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|x64.Build.0 = Release|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|x86.ActiveCfg = Release|Any CPU
+		{436221A5-06B9-4508-8A2F-BD32B3ADEF48}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

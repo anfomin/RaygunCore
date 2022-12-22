@@ -8,7 +8,7 @@ namespace RaygunCore.Services;
 /// </summary>
 public class RaygunLogger : ILogger
 {
-	static HashSet<Task> _runningTasks = new HashSet<Task>();
+	static HashSet<Task> _runningTasks = new();
 	public static IEnumerable<Task> RunningTasks => _runningTasks;
 
 	readonly Lazy<IRaygunClient> _client;
@@ -19,8 +19,9 @@ public class RaygunLogger : ILogger
 	/// <summary>
 	/// Scopes not implemeted.
 	/// </summary>
-	public IDisposable BeginScope<TState>(TState state)
-		=> new EmptyDisposable();
+	public IDisposable? BeginScope<TState>(TState state)
+		where TState: notnull
+		=> null;
 
 	/// <inheritdoc/>
 	public bool IsEnabled(LogLevel logLevel) => logLevel >= LogLevel.Warning;
@@ -50,9 +51,4 @@ public class RaygunLogger : ILogger
 			LogLevel.Critical => RaygunSeverity.Critical,
 			_ => throw new NotSupportedException($"LogLevel {logLevel} is not supported")
 		};
-
-	class EmptyDisposable : IDisposable
-	{
-		public void Dispose() { }
-	}
 }

@@ -10,7 +10,7 @@ public class RaygunEnvironmentMessage
 	public string? Architecture { get; set; }
 	public ulong? TotalVirtualMemory { get; set; }
 	public ulong? AvailableVirtualMemory { get; set; }
-	public IList<double>? DiskSpaceFree { get; set; }
+	public List<double>? DiskSpaceFree { get; set; }
 	public ulong? TotalPhysicalMemory { get; set; }
 	public ulong? AvailablePhysicalMemory { get; set; }
 	public double? UtcOffset { get; set; }

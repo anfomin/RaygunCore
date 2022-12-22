@@ -3,5 +3,5 @@
 public class RaygunMessage
 {
 	public DateTime OccurredOn { get; set; } = DateTime.UtcNow;
-	public RaygunMessageDetails Details { get; } = new RaygunMessageDetails();
+	public RaygunMessageDetails Details { get; set; } = new();
 }

@@ -76,13 +76,12 @@ public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 
 		if (exception.Data != null)
 		{
-			var data = new Dictionary<object, object?>();
+			message.Data = new();
 			foreach (object key in exception.Data.Keys)
 			{
 				if (!ExceptionExtensions.SentKey.Equals(key))
-					data[key] = exception.Data[key];
+					message.Data[key] = exception.Data[key];
 			}
-			message.Data = data;
 		}
 
 		if (exception is AggregateException ae && ae.InnerExceptions != null)
@@ -118,7 +117,7 @@ public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 
 			lines.Add(new RaygunErrorStackTraceLineMessage
 			{
-				FileName = frame.GetFileName() ?? string.Empty,
+				FileName = frame.GetFileName(),
 				LineNumber = lineNumber,
 				ClassName = method.DeclaringType?.FullName ?? "(unknown)",
 				MethodName = GenerateMethodName(method)
@@ -138,12 +137,12 @@ public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 		if (method is MethodInfo && method.IsGenericMethod)
 		{
 			sb.Append("<");
-			sb.Append(String.Join(",", method.GetGenericArguments().Select(a => a.Name)));
+			sb.Append(string.Join(",", method.GetGenericArguments().Select(a => a.Name)));
 			sb.Append(">");
 		}
 
 		sb.Append("(");
-		sb.Append(String.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType?.Name ?? "<UnknownType>"} {p.Name}")));
+		sb.Append(string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType?.Name ?? "<UnknownType>"} {p.Name}")));
 		sb.Append(")");
 		return sb.ToString();
 	}

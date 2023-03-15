@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using RaygunCore.Messages;
 using RaygunCore.Services;
@@ -49,13 +51,20 @@ public class RaygunClientTest
 			new MainMessageProvider(Options.Create(raygunOptions)),
 			new TestUserMessageProvider()
 		});
-		var raygunClient = new DefaultRaygunClient(httpClientFactory, raygunMessageBuilder, Enumerable.Empty<IRaygunValidator>(), Options.Create(raygunOptions));
+		var raygunClient = new DefaultRaygunClient(
+			NullLoggerFactory.Instance.CreateLogger<DefaultRaygunClient>(),
+			httpClientFactory,
+			raygunMessageBuilder,
+			Enumerable.Empty<IRaygunValidator>(),
+			Options.Create(raygunOptions)
+		);
 		await raygunClient.SendAsync(message, severity, tags);
 		server.Stop();
 
 		var result = await resultTask;
 		result.Method.Should().Be("POST");
 		result.Headers["X-ApiKey"].Should().Be(raygunOptions.ApiKey);
+		result.Headers["Content-Length"].Should().NotBeNull();
 		result.ContentType.Should().StartWith("application/json");
 		result.Content.Should().NotBeNullOrEmpty();
 		result.Content.Should().NotContain("\t");

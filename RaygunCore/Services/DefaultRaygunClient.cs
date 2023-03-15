@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RaygunCore.Messages;
 
@@ -9,17 +10,20 @@ namespace RaygunCore.Services;
 /// </summary>
 public class DefaultRaygunClient : IRaygunClient
 {
+	readonly ILogger _logger;
 	readonly IHttpClientFactory _clientFactory;
 	readonly IRaygunMessageBuilder _messageBuilder;
 	readonly IEnumerable<IRaygunValidator> _validators;
 	readonly RaygunOptions _options;
 
 	public DefaultRaygunClient(
+		ILogger<DefaultRaygunClient> logger,
 		IHttpClientFactory clientFactory,
 		IRaygunMessageBuilder messageBuilder,
 		IEnumerable<IRaygunValidator> validators,
 		IOptions<RaygunOptions> options)
 	{
+		_logger = logger;
 		_clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
 		_messageBuilder = messageBuilder ?? throw new ArgumentNullException(nameof(messageBuilder));
 		_validators = validators ?? throw new ArgumentNullException(nameof(validators));;
@@ -77,13 +81,17 @@ public class DefaultRaygunClient : IRaygunClient
 	{
 		try
 		{
-			var result = await CreateClient().PostAsync(_options.ApiEndpoint, JsonContent.Create(message));
+			var content = JsonContent.Create(message);
+			await content.LoadIntoBufferAsync();
+			var result = await CreateClient().PostAsync(_options.ApiEndpoint, content);
 			result.EnsureSuccessStatusCode();
 		}
 		catch (Exception ex)
 		{
 			if (_options.ThrowOnError)
 				throw new RaygunException(ex);
+			else
+				_logger.LogError(ex, "Raygun transmission failed");
 		}
 	}
 }

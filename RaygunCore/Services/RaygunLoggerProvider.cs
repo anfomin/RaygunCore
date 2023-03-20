@@ -8,17 +8,17 @@ namespace RaygunCore.Services;
 /// </summary>
 public class RaygunLoggerProvider : ILoggerProvider
 {
-	readonly IServiceProvider _services;
+	readonly Lazy<IRaygunClient> _clientLazy;
 
 	public RaygunLoggerProvider(IServiceProvider services)
-		=> _services = services ?? throw new ArgumentNullException(nameof(services));
+	{
+		// using Lazy because IHttpClientFactory requires logger and DI fails with dependency recursion
+		_clientLazy = new Lazy<IRaygunClient>(() => services.GetRequiredService<IRaygunClient>());
+	}
 
 	/// <inheritdoc/>
 	public ILogger CreateLogger(string categoryName)
-	{
-		// using Lazy because IHttpClientFactory requires logger and DI fails with dependency recursion
-		return new RaygunLogger(new Lazy<IRaygunClient>(() => _services.GetRequiredService<IRaygunClient>()));
-	}
+		=> new RaygunLogger(_clientLazy, categoryName);
 
 	/// <inheritdoc/>
 	public void Dispose() { }

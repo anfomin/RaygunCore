@@ -31,8 +31,12 @@ public class DefaultRaygunClient : IRaygunClient
 	}
 
 	/// <inheritdoc/>
-	public async Task SendAsync(string message, Exception? exception, RaygunSeverity? severity = null, IEnumerable<string>? tags = null, IDictionary<string, object>? customData = null)
-	{
+	public async Task SendAsync(string message,
+		Exception? exception,
+		RaygunSeverity? severity = null,
+		IEnumerable<string>? tags = null,
+		IDictionary<string, object>? customData = null
+	) {
 		if (_options.Tags.Count > 0)
 			tags = tags == null ? _options.Tags : tags.Concat(_options.Tags).Distinct();
 

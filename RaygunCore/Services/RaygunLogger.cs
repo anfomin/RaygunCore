@@ -12,9 +12,13 @@ public class RaygunLogger : ILogger
 	public static IEnumerable<Task> RunningTasks => _runningTasks;
 
 	readonly Lazy<IRaygunClient> _client;
+	readonly string? _category;
 
-	public RaygunLogger(Lazy<IRaygunClient> client)
-		=> _client = client ?? throw new ArgumentNullException(nameof(client));
+	public RaygunLogger(Lazy<IRaygunClient> client, string? category = null)
+	{
+		_client = client ?? throw new ArgumentNullException(nameof(client));
+		_category = category;
+	}
 
 	/// <summary>
 	/// Scopes not implemeted.
@@ -24,7 +28,8 @@ public class RaygunLogger : ILogger
 		=> null;
 
 	/// <inheritdoc/>
-	public bool IsEnabled(LogLevel logLevel) => logLevel >= LogLevel.Warning;
+	public bool IsEnabled(LogLevel logLevel)
+		=> logLevel >= LogLevel.Warning;
 
 	/// <inheritdoc/>
 	public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
@@ -36,7 +41,14 @@ public class RaygunLogger : ILogger
 		var message = formatter(state, exception);
 		if (!string.IsNullOrEmpty(message) || exception != null)
 		{
-			var task = _client.Value.SendAsync(message, exception, GetSeverity(logLevel));
+			var task = _client.Value.SendAsync(message, exception,
+				severity: GetSeverity(logLevel),
+				tags: _category == null ? null : new[] { _category },
+				customData: eventId == default ? null : new Dictionary<string, object>()
+				{
+					["EventId"] = eventId
+				}
+			);
 			if (!task.IsCompleted)
 				_runningTasks.Add(task);
 			task.ContinueWith(task => _runningTasks.Remove(task));

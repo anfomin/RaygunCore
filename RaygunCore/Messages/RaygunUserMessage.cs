@@ -1,6 +1,6 @@
 ﻿namespace RaygunCore.Messages;
 
-public class RaygunUserMessage
+public class RaygunUserMessage(string identifier)
 {
 	/// <summary>
 	/// Unique Identifier for this user. Set this to the identifier you use internally to look up users,
@@ -8,7 +8,7 @@ public class RaygunUserMessage
 	/// treat any duplicated values as the same user. If you use the user's email address as the identifier,
 	/// enter it here as well as the Email field.
 	/// </summary>
-	public string Identifier { get; set; }
+	public string Identifier { get; set; } = identifier;
 
 	/// <summary>
 	/// Flag indicating whether a user is anonymous or not.
@@ -34,9 +34,4 @@ public class RaygunUserMessage
 	/// Device Identifier. Could be used to identify users across apps.
 	/// </summary>
 	public string? UUID { get; set; }
-
-	public RaygunUserMessage(string identifier)
-	{
-		Identifier = identifier;
-	}
 }

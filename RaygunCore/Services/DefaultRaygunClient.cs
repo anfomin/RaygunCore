@@ -8,27 +8,19 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Default implementation for <see cref="IRaygunClient"/>.
 /// </summary>
-public class DefaultRaygunClient : IRaygunClient
+public class DefaultRaygunClient(
+	ILogger<DefaultRaygunClient> logger,
+	IHttpClientFactory clientFactory,
+	IRaygunMessageBuilder messageBuilder,
+	IEnumerable<IRaygunValidator> validators,
+	IOptions<RaygunOptions> options
+) : IRaygunClient
 {
-	readonly ILogger _logger;
-	readonly IHttpClientFactory _clientFactory;
-	readonly IRaygunMessageBuilder _messageBuilder;
-	readonly IEnumerable<IRaygunValidator> _validators;
-	readonly RaygunOptions _options;
-
-	public DefaultRaygunClient(
-		ILogger<DefaultRaygunClient> logger,
-		IHttpClientFactory clientFactory,
-		IRaygunMessageBuilder messageBuilder,
-		IEnumerable<IRaygunValidator> validators,
-		IOptions<RaygunOptions> options)
-	{
-		_logger = logger;
-		_clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
-		_messageBuilder = messageBuilder ?? throw new ArgumentNullException(nameof(messageBuilder));
-		_validators = validators ?? throw new ArgumentNullException(nameof(validators));;
-		_options = options.Value;
-	}
+	readonly ILogger _logger = logger = logger ?? throw new ArgumentNullException(nameof(logger));
+	readonly IHttpClientFactory _clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
+	readonly IRaygunMessageBuilder _messageBuilder = messageBuilder ?? throw new ArgumentNullException(nameof(messageBuilder));
+	readonly IEnumerable<IRaygunValidator> _validators = validators ?? throw new ArgumentNullException(nameof(validators));
+	readonly RaygunOptions _options = options.Value;
 
 	/// <inheritdoc/>
 	public async Task SendAsync(string message,
@@ -47,8 +39,7 @@ public class DefaultRaygunClient : IRaygunClient
 			{
 				var msg = _messageBuilder.Build(message, ex, severity, tags, customData);
 				await TransmitMessageAsync(msg);
-				if (ex != null)
-					ex.MarkSent();
+				ex?.MarkSent();
 			}
 		}
 	}
@@ -73,8 +64,8 @@ public class DefaultRaygunClient : IRaygunClient
 	/// <param name="exception">The exception to deliver.</param>
 	protected virtual bool ShouldSend(string message, Exception? exception)
 		=> (exception == null || !exception.IsSent())
-			&& exception is not RaygunException
-			&& _validators.All(v => v.ShouldSend(message, exception));
+		&& exception is not RaygunException
+		&& _validators.All(v => v.ShouldSend(message, exception));
 
 	/// <summary>
 	/// Transmits a message to Raygun.

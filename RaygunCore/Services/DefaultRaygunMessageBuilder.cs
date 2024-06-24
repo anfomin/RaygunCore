@@ -9,17 +9,17 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Provides <see cref="RaygunMessage"/> building using providers <see cref="IRaygunMessageProvider"/>.
 /// </summary>
-public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
+public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers) : IRaygunMessageBuilder
 {
-	static Regex[] DiagnosticsMessages =
-	{
-		new("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase),
-		new(@"^Connection ID ""[\w:-]+"", Request ID ""[\w:-]+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)
-	};
-	readonly IEnumerable<IRaygunMessageProvider> _providers;
+	readonly static Regex[] DiagnosticsMessages = [DiagnosticsMessage1(), DiagnosticsMessage2()];
 
-	public DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers)
-		=> _providers = providers ?? throw new ArgumentNullException(nameof(providers));
+	[GeneratedRegex("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase)]
+	private static partial Regex DiagnosticsMessage1();
+
+	[GeneratedRegex(@"^Connection ID ""[\w:-]+"", Request ID ""[\w:-]+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)]
+	private static partial Regex DiagnosticsMessage2();
+
+	readonly IEnumerable<IRaygunMessageProvider> _providers = providers ?? throw new ArgumentNullException(nameof(providers));
 
 	/// <inheritdoc/>
 	public virtual RaygunMessage Build(string message, Exception? exception, RaygunSeverity? severity, IEnumerable<string>? tags, IDictionary<string, object>? customData)
@@ -92,17 +92,17 @@ public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 		return message;
 	}
 
-	RaygunErrorStackTraceLineMessage[] BuildStackTrace()
+	RaygunErrorStackTraceLineMessage[]? BuildStackTrace()
 		=> BuildStackTrace(new StackTrace(true), ignoreRaygunCore: true);
 
-	RaygunErrorStackTraceLineMessage[] BuildStackTrace(Exception exception)
+	RaygunErrorStackTraceLineMessage[]? BuildStackTrace(Exception exception)
 		=> BuildStackTrace(new StackTrace(exception, true));
 
-	RaygunErrorStackTraceLineMessage[] BuildStackTrace(StackTrace stackTrace, bool ignoreRaygunCore = false)
+	RaygunErrorStackTraceLineMessage[]? BuildStackTrace(StackTrace stackTrace, bool ignoreRaygunCore = false)
 	{
 		var frames = stackTrace.GetFrames();
 		if (frames == null || frames.Length == 0)
-			return new[] { new RaygunErrorStackTraceLineMessage { FileName = "none", LineNumber = 0 } };
+			return null;
 
 		var lines = new List<RaygunErrorStackTraceLineMessage>();
 		foreach (var frame in frames)
@@ -127,23 +127,23 @@ public class DefaultRaygunMessageBuilder : IRaygunMessageBuilder
 		return lines.ToArray();
 	}
 
-	bool ShouldApplyCustomErrorMessage(string message, Exception exception)
+	static bool ShouldApplyCustomErrorMessage(string message, Exception exception)
 		=> message != exception.Message && DiagnosticsMessages.All(regex => !regex.IsMatch(message));
 
-	string GenerateMethodName(MethodBase method)
+	static string GenerateMethodName(MethodBase method)
 	{
 		var sb = new StringBuilder(method.Name);
 
 		if (method is MethodInfo && method.IsGenericMethod)
 		{
-			sb.Append("<");
+			sb.Append('<');
 			sb.Append(string.Join(",", method.GetGenericArguments().Select(a => a.Name)));
-			sb.Append(">");
+			sb.Append('>');
 		}
 
-		sb.Append("(");
+		sb.Append('(');
 		sb.Append(string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType?.Name ?? "<UnknownType>"} {p.Name}")));
-		sb.Append(")");
+		sb.Append(')');
 		return sb.ToString();
 	}
 }

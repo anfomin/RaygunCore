@@ -6,25 +6,19 @@ namespace RaygunCore.Services;
 /// Preforms logging to Raygun via <see cref="IRaygunClient"/>.
 /// Works only with log level warning and higher.
 /// </summary>
-public class RaygunLogger : ILogger
+public class RaygunLogger(Lazy<IRaygunClient> client, string? category = null) : ILogger
 {
-	static HashSet<Task> _runningTasks = new();
+	static readonly HashSet<Task> _runningTasks = [];
 	public static IEnumerable<Task> RunningTasks => _runningTasks;
 
-	readonly Lazy<IRaygunClient> _client;
-	readonly string? _category;
-
-	public RaygunLogger(Lazy<IRaygunClient> client, string? category = null)
-	{
-		_client = client ?? throw new ArgumentNullException(nameof(client));
-		_category = category;
-	}
+	readonly Lazy<IRaygunClient> _client = client ?? throw new ArgumentNullException(nameof(client));
+	readonly string? _category = category;
 
 	/// <summary>
 	/// Scopes not implemeted.
 	/// </summary>
 	public IDisposable? BeginScope<TState>(TState state)
-		where TState: notnull
+		where TState : notnull
 		=> null;
 
 	/// <inheritdoc/>
@@ -55,7 +49,7 @@ public class RaygunLogger : ILogger
 		}
 	}
 
-	RaygunSeverity GetSeverity(LogLevel logLevel)
+	static RaygunSeverity GetSeverity(LogLevel logLevel)
 		=> logLevel switch
 		{
 			LogLevel.Warning => RaygunSeverity.Warning,

@@ -46,11 +46,11 @@ public class RaygunClientTest
 			AppVersion = "1.0",
 			ThrowOnError = true
 		};
-		var raygunMessageBuilder = new DefaultRaygunMessageBuilder(new IRaygunMessageProvider[]
-		{
+		var raygunMessageBuilder = new DefaultRaygunMessageBuilder(
+		[
 			new MainMessageProvider(Options.Create(raygunOptions)),
 			new TestUserMessageProvider()
-		});
+		]);
 		var raygunClient = new DefaultRaygunClient(
 			NullLoggerFactory.Instance.CreateLogger<DefaultRaygunClient>(),
 			httpClientFactory,

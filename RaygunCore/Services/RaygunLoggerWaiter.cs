@@ -6,14 +6,11 @@ namespace RaygunCore.Services;
 /// <summary>
 /// When stopping waites for all <see cref="RaygunLogger"/> requests to finish.
 /// </summary>
-public class RaygunLoggerWaiter : IHostedService
+public class RaygunLoggerWaiter(ILogger<RaygunLoggerWaiter> logger) : IHostedService
 {
-	readonly ILogger _logger;
+	readonly ILogger _logger = logger;
 
 	public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
-
-	public RaygunLoggerWaiter(ILogger<RaygunLoggerWaiter> logger)
-		=> _logger = logger;
 
 	public Task StartAsync(CancellationToken cancellationToken)
 		=> Task.CompletedTask;
@@ -24,7 +21,7 @@ public class RaygunLoggerWaiter : IHostedService
 		if (!tasks.Any())
 			return Task.CompletedTask;
 
-		_logger.LogInformation($"Waiting for {tasks.Count()} Raygun requests to complete");
+		_logger.LogInformation("Waiting for {TaskCount} Raygun requests to complete", tasks.Count());
 		return Task.WhenAny(
 			Task.Delay(Timeout, cancellationToken),
 			Task.WhenAll(RaygunLogger.RunningTasks)

@@ -6,15 +6,10 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Creates <see cref="RaygunLogger"/>.
 /// </summary>
-public class RaygunLoggerProvider : ILoggerProvider
+public class RaygunLoggerProvider(IServiceProvider services) : ILoggerProvider
 {
-	readonly Lazy<IRaygunClient> _clientLazy;
-
-	public RaygunLoggerProvider(IServiceProvider services)
-	{
-		// using Lazy because IHttpClientFactory requires logger and DI fails with dependency recursion
-		_clientLazy = new Lazy<IRaygunClient>(() => services.GetRequiredService<IRaygunClient>());
-	}
+	// using Lazy because IHttpClientFactory requires logger and DI fails with dependency recursion
+	readonly Lazy<IRaygunClient> _clientLazy = new(() => services.GetRequiredService<IRaygunClient>());
 
 	/// <inheritdoc/>
 	public ILogger CreateLogger(string categoryName)

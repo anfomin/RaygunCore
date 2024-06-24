@@ -7,8 +7,8 @@ public class RaygunMessageDetails
 	public string? Version { get; set; }
 	public RaygunClientMessage Client { get; set; } = new();
 	public RaygunEnvironmentMessage Environment { get; set; } = new();
-	public List<string> Tags { get; set; } = new();
-	public Dictionary<string, object> UserCustomData { get; set; } = new();
+	public List<string> Tags { get; set; } = [];
+	public Dictionary<string, object> UserCustomData { get; set; } = [];
 	public RaygunErrorMessage Error { get; set; } = new();
 	public RaygunUserMessage? User { get; set; }
 	public RaygunRequestMessage? Request { get; set; }

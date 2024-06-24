@@ -7,12 +7,9 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Provides <see cref="RaygunMessageDetails"/> with response information from <see cref="HttpContext"/>.
 /// </summary>
-public class ResponseMessageProvider : IRaygunMessageProvider
+public class ResponseMessageProvider(IHttpContextAccessor httpContextAccessor) : IRaygunMessageProvider
 {
-	readonly IHttpContextAccessor _httpContextAccessor;
-
-	public ResponseMessageProvider(IHttpContextAccessor httpContextAccessor)
-		=> _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+	readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
 	/// <inheritdoc/>
 	public void Apply(RaygunMessageDetails details)

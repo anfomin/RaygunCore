@@ -16,11 +16,8 @@ public interface IRaygunBuilder
 	bool IsLogging { get; }
 }
 
-internal class RaygunBuilder : IRaygunBuilder
+internal class RaygunBuilder(IServiceCollection services) : IRaygunBuilder
 {
-	public IServiceCollection Services { get; }
+	public IServiceCollection Services { get; } = services ?? throw new ArgumentNullException(nameof(services));
 	public bool IsLogging { get; internal set; }
-
-	public RaygunBuilder(IServiceCollection services)
-		=> Services = services ?? throw new ArgumentNullException(nameof(services));
 }

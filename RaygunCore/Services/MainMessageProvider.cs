@@ -7,12 +7,9 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Provides <see cref="RaygunMessageDetails"/> with client information, machine name and application version.
 /// </summary>
-public class MainMessageProvider : IRaygunMessageProvider
+public class MainMessageProvider(IOptions<RaygunOptions> options) : IRaygunMessageProvider
 {
-	readonly RaygunOptions _options;
-
-	public MainMessageProvider(IOptions<RaygunOptions> options)
-		=>  _options = options.Value;
+	readonly RaygunOptions _options = options.Value;
 
 	/// <inheritdoc/>
 	public void Apply(RaygunMessageDetails details)

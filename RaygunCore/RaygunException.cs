@@ -3,8 +3,6 @@ namespace RaygunCore;
 /// <summary>
 /// Exception that occured when sending error to the Raygun.
 /// </summary>
-public class RaygunException : Exception
+public class RaygunException(Exception innerException) : Exception("Error sending exception to Raygun", innerException)
 {
-	public RaygunException(Exception innerException)
-		: base("Error sending exception to Raygun", innerException) { }
 }

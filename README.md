@@ -1,6 +1,6 @@
-# Raygun provider for .NET Core 2.0
+# Raygun provider for .NET
 
-Standart [Raygun4Net library](https://github.com/MindscapeHQ/raygun4net) does not work well with .NET Core 2.0. So I've created library for new architecture:
+Standart [Raygun4Net library](https://github.com/MindscapeHQ/raygun4net) does not work well with .NET. So I've created library for new architecture:
 
 - Built with interfaces and works via default dependency injection;
 - As result, services can be easily extended or replaced;

@@ -5,7 +5,7 @@ namespace RaygunCore;
 /// <summary>
 /// Provides options for Raygun services.
 /// </summary>
-public class RaygunOptions
+public record RaygunOptions
 {
 	/// <summary>
 	/// Gets or sets API key.

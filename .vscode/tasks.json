@@ -10,9 +10,14 @@
 	"tasks": [
 		{
 			"label": "build",
-			"type": "process",
 			"command": "dotnet",
-			"args": ["build"],
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/RaygunCore.sln",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary;ForceNoAlign"
+			],
 			"problemMatcher": "$msCompile",
 			"isBuildCommand": true
 		}

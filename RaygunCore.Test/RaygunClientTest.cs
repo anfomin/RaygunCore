@@ -29,20 +29,20 @@ public class RaygunClientTest
 			context.Response.Close();
 			return (
 				Method: context.Request.HttpMethod,
-				ContentType: context.Request.ContentType,
-				Headers: context.Request.Headers,
+				context.Request.ContentType,
+				context.Request.Headers,
 				Content: content
 			);
 		});
 
 		string message = "Test message";
 		var severity = RaygunSeverity.Critical;
-		var tags = new string[] { "tag1", "tag2" };
+		string[] tags = ["tag1", "tag2"];
 		var httpClientFactory = new TestHttpClientFactory();
 		var raygunOptions = new RaygunOptions
 		{
 			ApiKey = "API_KEY",
-			ApiEndpoint = new Uri(serverUrl),
+			ApiEndpoint = new(serverUrl),
 			AppVersion = "1.0",
 			ThrowOnError = true
 		};
@@ -55,7 +55,7 @@ public class RaygunClientTest
 			NullLoggerFactory.Instance.CreateLogger<DefaultRaygunClient>(),
 			httpClientFactory,
 			raygunMessageBuilder,
-			Enumerable.Empty<IRaygunValidator>(),
+			[],
 			Options.Create(raygunOptions)
 		);
 		await raygunClient.SendAsync(message, severity, tags);

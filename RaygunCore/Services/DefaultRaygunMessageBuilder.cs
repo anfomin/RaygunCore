@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -11,13 +12,13 @@ namespace RaygunCore.Services;
 /// </summary>
 public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers) : IRaygunMessageBuilder
 {
-	readonly static Regex[] DiagnosticsMessages = [DiagnosticsMessage1(), DiagnosticsMessage2()];
+	readonly static ImmutableArray<Regex> DiagnosticsMessages = [DiagnosticsMessage1, DiagnosticsMessage2];
 
 	[GeneratedRegex("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase)]
-	private static partial Regex DiagnosticsMessage1();
+	private static partial Regex DiagnosticsMessage1 { get; }
 
 	[GeneratedRegex(@"^Connection ID ""[\w:-]+"", Request ID ""[\w:-]+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)]
-	private static partial Regex DiagnosticsMessage2();
+	private static partial Regex DiagnosticsMessage2 { get; }
 
 	readonly IEnumerable<IRaygunMessageProvider> _providers = providers ?? throw new ArgumentNullException(nameof(providers));
 
@@ -76,7 +77,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 
 		if (exception.Data != null)
 		{
-			message.Data = new();
+			message.Data = [];
 			foreach (object key in exception.Data.Keys)
 			{
 				if (!ExceptionExtensions.SentKey.Equals(key))
@@ -85,7 +86,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 		}
 
 		if (exception is AggregateException ae && ae.InnerExceptions != null)
-			message.InnerErrors = ae.InnerExceptions.Select(ex => CreateErrorMessage(ex)).ToArray();
+			message.InnerErrors = ae.InnerExceptions.Select(CreateErrorMessage).ToArray();
 		else if (exception.InnerException != null)
 			message.InnerError = CreateErrorMessage(exception.InnerException);
 
@@ -115,7 +116,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 			if (lineNumber == 0)
 				lineNumber = frame.GetILOffset();
 
-			lines.Add(new RaygunErrorStackTraceLineMessage
+			lines.Add(new()
 			{
 				FileName = frame.GetFileName(),
 				LineNumber = lineNumber,

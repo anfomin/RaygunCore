@@ -37,7 +37,7 @@ public class RaygunLogger(Lazy<IRaygunClient> client, string? category = null) :
 		{
 			var task = _client.Value.SendAsync(message, exception,
 				severity: GetSeverity(logLevel),
-				tags: _category == null ? null : new[] { _category },
+				tags: _category == null ? null : [_category],
 				customData: eventId == default ? null : new Dictionary<string, object>()
 				{
 					["EventId"] = eventId

@@ -15,7 +15,7 @@ public class MainMessageProvider(IOptions<RaygunOptions> options) : IRaygunMessa
 	public void Apply(RaygunMessageDetails details)
 	{
 		var asm = GetType().Assembly;
-		details.MachineName = System.Environment.MachineName;
+		details.MachineName = Environment.MachineName;
 		details.Version = _options.AppVersion ?? Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 		details.Client.Name = asm.GetCustomAttribute<AssemblyTitleAttribute>()?.Title;
 		details.Client.Version = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;

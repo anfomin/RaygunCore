@@ -8,7 +8,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<VersionPrefix>2.5.0</VersionPrefix>
 		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
-		<NoWarn>$(NoWarn);1573;1591</NoWarn>
+		<NoWarn>CS1573;CS1591</NoWarn>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>

@@ -7,16 +7,10 @@ namespace RaygunCore.Services;
 /// <summary>
 /// Rejects errors for local requests if <see cref="RaygunOptions.IgnoreLocalErrors"/>.
 /// </summary>
-public class LocalValidator : IRaygunValidator
+public class LocalValidator(IHttpContextAccessor httpContextAccessor, IOptions<RaygunOptions> options) : IRaygunValidator
 {
-	readonly IHttpContextAccessor _httpContextAccessor;
-	readonly RaygunOptions _options;
-
-	public LocalValidator(IHttpContextAccessor httpContextAccessor, IOptions<RaygunOptions> options)
-	{
-		_httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-		_options = options.Value;
-	}
+	readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+	readonly RaygunOptions _options = options.Value;
 
 	/// <inheritdoc/>
 	public bool ShouldSend(string message, Exception? ex)

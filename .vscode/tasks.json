@@ -1,11 +1,5 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
 	"version": "2.0.0",
-	"type": "shell",
-	"presentation": {
-		"reveal": "silent"
-	},
 	"problemMatcher": "$msCompile",
 	"tasks": [
 		{
@@ -18,8 +12,10 @@
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary;ForceNoAlign"
 			],
-			"problemMatcher": "$msCompile",
-			"isBuildCommand": true
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }

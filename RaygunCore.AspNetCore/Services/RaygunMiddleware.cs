@@ -10,7 +10,7 @@ public class RaygunMiddleware(RequestDelegate next, IRaygunClient client, IOptio
 {
 	readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
 	readonly IRaygunClient _client = client ?? throw new ArgumentNullException(nameof(client));
-	readonly bool _ignoreCanceledErros = options.Value.IgnoreCanceledErrors;
+	readonly bool _ignoreCanceledErrors = options.Value.IgnoreCanceledErrors;
 
 	public async Task Invoke(HttpContext httpContext)
 	{
@@ -20,7 +20,7 @@ public class RaygunMiddleware(RequestDelegate next, IRaygunClient client, IOptio
 		}
 		catch (Exception ex)
 		{
-			if (!_ignoreCanceledErros || (ex is not OperationCanceledException && ex.GetBaseException() is not OperationCanceledException))
+			if (!_ignoreCanceledErrors || (ex is not OperationCanceledException && ex.GetBaseException() is not OperationCanceledException))
 				await _client.SendAsync(ex, RaygunSeverity.Critical);
 			throw;
 		}

@@ -15,7 +15,7 @@ public class RaygunLogger(Lazy<IRaygunClient> client, string? category = null) :
 	readonly string? _category = category;
 
 	/// <summary>
-	/// Scopes not implemeted.
+	/// Scopes not implemented.
 	/// </summary>
 	public IDisposable? BeginScope<TState>(TState state)
 		where TState : notnull
@@ -45,7 +45,7 @@ public class RaygunLogger(Lazy<IRaygunClient> client, string? category = null) :
 			);
 			if (!task.IsCompleted)
 				_runningTasks.Add(task);
-			task.ContinueWith(task => _runningTasks.Remove(task));
+			task.ContinueWith(_runningTasks.Remove);
 		}
 	}
 

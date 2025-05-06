@@ -1,7 +1,7 @@
 namespace RaygunCore;
 
 /// <summary>
-/// Entiry point to send messages to Raygun.
+/// Entry point to send messages to Raygun.
 /// </summary>
 public interface IRaygunClient
 {

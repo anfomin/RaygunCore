@@ -48,7 +48,7 @@ public static class RaygunServiceExtensions
 		=> services.AddRaygun().Configure(configuration);
 
 	/// <summary>
-	/// Congifures Raygun options.
+	/// Configures Raygun options.
 	/// </summary>
 	/// <param name="options">Action to configure Raygun options.</param>
 	public static IRaygunBuilder Configure(this IRaygunBuilder builder, Action<RaygunOptions> options)
@@ -58,7 +58,7 @@ public static class RaygunServiceExtensions
 	}
 
 	/// <summary>
-	/// Congifures Raygun options.
+	/// Configures Raygun options.
 	/// </summary>
 	/// <param name="configuration">Raygun options configuration section.</param>
 	public static IRaygunBuilder Configure(this IRaygunBuilder builder, IConfiguration configuration)

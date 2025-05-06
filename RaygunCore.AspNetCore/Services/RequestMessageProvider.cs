@@ -71,13 +71,15 @@ public class RequestMessageProvider(IHttpContextAccessor httpContextAccessor, IO
 	{
 		if (_options.IgnoreForm || !request.HasFormContentType)
 			return null;
-
-		IFormCollection form;
-		try { form = request.Form; }
-		catch (InvalidOperationException) { return null; }
-
-		return request.Form
-			.Where(h => !_options.IgnoreFormFields.Contains(h.Key))
-			.ToDictionary(h => h.Key, h => (object)h.Value.ToString());
+		try
+		{
+			return request.Form
+				.Where(h => !_options.IgnoreFormFields.Contains(h.Key))
+				.ToDictionary(h => h.Key, h => (object)h.Value.ToString());
+		}
+		catch (InvalidOperationException)
+		{
+			return null;
+		}
 	}
 }

@@ -1,18 +1,21 @@
 # Build
-artifacts
 bin
 obj
+/artifacts
 
 # User-specific files
 *.suo
 *.user
-*.docstates
 *.ide
+*.log
 *.publishsettings
+/.idea/shelf/
+/.idea/httpRequests/
+/.idea/**/workspace.xml
+/.idea/**/tasks.xml
+/.idea/**/projectSettingsUpdater.xml
 
-# OS X temporary files
+# System files
 .DS_Store
 ._*
-
-# IDE
-.vs
+Thumbs.db

@@ -13,7 +13,7 @@ public static class ExceptionExtensions
 	/// <returns><c>True</c> if flagged successfully. Otherwise <c>false</c>.</returns>
 	public static bool MarkSent(this Exception exception)
 	{
-		if (exception.Data == null)
+		if (exception.Data.Count == 0)
 			return false;
 
 		try
@@ -31,7 +31,7 @@ public static class ExceptionExtensions
 	/// Gets if exception is sent to Raygun.
 	/// </summary>
 	public static bool IsSent(this Exception exception)
-		=> exception.Data != null && exception.Data.Contains(SentKey) && exception.Data[SentKey] is bool b && b;
+		=> exception.Data.Contains(SentKey) && exception.Data[SentKey] is true;
 
 	/// <summary>
 	/// Returns inner exceptions if <paramref name="exception"/> is any of <paramref name="wrapperExceptionTypes"/>.

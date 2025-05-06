@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace RaygunCore.Services;
 
 /// <summary>
-/// When stopping waites for all <see cref="RaygunLogger"/> requests to finish.
+/// When stopping waits for all <see cref="RaygunLogger"/> requests to finish.
 /// </summary>
 public class RaygunLoggerWaiter(ILogger<RaygunLoggerWaiter> logger) : IHostedService
 {

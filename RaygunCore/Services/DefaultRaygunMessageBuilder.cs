@@ -12,13 +12,13 @@ namespace RaygunCore.Services;
 /// </summary>
 public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvider> providers) : IRaygunMessageBuilder
 {
-	readonly static ImmutableArray<Regex> DiagnosticsMessages = [DiagnosticsMessage1, DiagnosticsMessage2];
+	static readonly ImmutableArray<Regex> DiagnosticsMessages = [DiagnosticsMessage1(), DiagnosticsMessage2()];
 
 	[GeneratedRegex("^An unhandled exception has occurred while executing the request.$", RegexOptions.IgnoreCase)]
-	private static partial Regex DiagnosticsMessage1 { get; }
+	private static partial Regex DiagnosticsMessage1();
 
 	[GeneratedRegex(@"^Connection ID ""[\w:-]+"", Request ID ""[\w:-]+"": An unhandled exception was thrown by the application.$", RegexOptions.IgnoreCase)]
-	private static partial Regex DiagnosticsMessage2 { get; }
+	private static partial Regex DiagnosticsMessage2();
 
 	readonly IEnumerable<IRaygunMessageProvider> _providers = providers ?? throw new ArgumentNullException(nameof(providers));
 
@@ -75,7 +75,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 			StackTrace = BuildStackTrace(exception)
 		};
 
-		if (exception.Data != null)
+		if (exception.Data.Count != 0)
 		{
 			message.Data = [];
 			foreach (object key in exception.Data.Keys)
@@ -85,7 +85,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 			}
 		}
 
-		if (exception is AggregateException ae && ae.InnerExceptions != null)
+		if (exception is AggregateException ae)
 			message.InnerErrors = ae.InnerExceptions.Select(CreateErrorMessage).ToArray();
 		else if (exception.InnerException != null)
 			message.InnerError = CreateErrorMessage(exception.InnerException);
@@ -102,7 +102,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 	RaygunErrorStackTraceLineMessage[]? BuildStackTrace(StackTrace stackTrace, bool ignoreRaygunCore = false)
 	{
 		var frames = stackTrace.GetFrames();
-		if (frames == null || frames.Length == 0)
+		if (frames.Length == 0)
 			return null;
 
 		var lines = new List<RaygunErrorStackTraceLineMessage>();
@@ -143,7 +143,7 @@ public partial class DefaultRaygunMessageBuilder(IEnumerable<IRaygunMessageProvi
 		}
 
 		sb.Append('(');
-		sb.Append(string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType?.Name ?? "<UnknownType>"} {p.Name}")));
+		sb.Append(string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}")));
 		sb.Append(')');
 		return sb.ToString();
 	}

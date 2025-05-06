@@ -2,20 +2,21 @@
 	<PropertyGroup>
 		<Product>RaygunCore</Product>
 		<Authors>AFomin</Authors>
-		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/anfomin/rayguncore</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/anfomin/rayguncore</PackageProjectUrl>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<VersionPrefix>2.5.0</VersionPrefix>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<VersionPrefix>2.6.0</VersionPrefix>
 		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
-		<NoWarn>CS1573;CS1591</NoWarn>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<RootNamespace>RaygunCore</RootNamespace>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>CS1573;CS1591</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="../LICENSE" Pack="true" PackagePath="" />
+		<None Include="../README.md" Pack="true" PackagePath=""/>
 	</ItemGroup>
 </Project>

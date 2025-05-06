@@ -18,7 +18,7 @@ public record RaygunOptions
 	public Uri ApiEndpoint { get; set; } = new Uri("https://api.raygun.com/entries");
 
 	/// <summary>
-	/// Gets or sets a application version identifier for all error messages sent to the Raygun endpoint.
+	/// Gets or sets an application version identifier for all error messages sent to the Raygun endpoint.
 	/// </summary>
 	public string? AppVersion { get; set; }
 

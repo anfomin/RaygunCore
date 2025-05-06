@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Root/">
+    <File Path="LICENSE" />
+    <File Path="publish.sh" />
+    <File Path="RaygunCore.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="RaygunCore.AspNetCore/RaygunCore.AspNetCore.csproj" />
+  <Project Path="RaygunCore.Test/RaygunCore.Test.csproj" />
+  <Project Path="RaygunCore/RaygunCore.csproj" />
+</Solution>
